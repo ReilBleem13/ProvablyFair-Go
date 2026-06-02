@@ -33,10 +33,12 @@ type SeedPart struct {
 }
 
 func CommitSeed(seed string) string {
-	h := sha256.New()
+	sum := sha256.Sum256([]byte(seed))
+	return hex.EncodeToString(sum[:])
+}
 
-	_, _ = h.Write([]byte(seed))
-	return "sha256:" + hex.EncodeToString(h.Sum(nil))
+func CommitSeedWithPrefix(seed string) string {
+	return "sha256:" + CommitSeed(seed)
 }
 
 func BuildFinalSeed(serverSeed string, parts []SeedPart) ([]byte, error) {
